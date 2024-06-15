@@ -33,6 +33,10 @@
             <input id="radio-a" type="radio" name="family" value="はい" checked><label for="radio-a">はい</label>
             <input id="radio-b" type="radio" name="family" value="いいえ"><label for="radio-b">いいえ</label>
         </div>
+        <p class="mt-3">画像を撮影・選択</p>
+        <div>
+            <input type="file" class="form-control w-100 mt-1" name="image" accept="image/*" capture="camera" required>
+        </div>
         <input type="submit" class="mt-4 btn btn-primary" value="送信">
     </form>
 
@@ -51,6 +55,25 @@
                 console.log("LIFF initialization succeeded");
             }).catch((err) => {
                 console.error('LIFF Initialization failed ', err);
+            });
+        }
+
+        function uploadImage(imageFile, callback) {
+            const formData = new FormData();
+            formData.append('file', imageFile);
+
+            fetch('YOUR_IMAGE_UPLOAD_ENDPOINT', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Image uploaded successfully:', data);
+                callback(data.url); // Assuming the server returns the URL of the uploaded image
+            })
+            .catch(error => {
+                console.error('Error uploading image:', error);
+                window.alert('Failed to upload image: ' + error);
             });
         }
 
@@ -75,10 +98,13 @@
             const temperature = $('input[name="temperature"]').val();
             const shushoujou = $('input[name="shushoujou"]').val();
             const family = $('input[name="family"]:checked').val();
+            const imageFile = $('input[name="image"]').prop('files')[0];
 
-            const msg = `${name}\n${bangou}\n${temperature}\n${shushoujou}\n${family}`;
-            console.log("Sending message: " + msg); // Log the message
-            sendText(msg);
+            uploadImage(imageFile, function(imageUrl) {
+                const msg = `${name}\n${bangou}\n${temperature}\n${shushoujou}\n${family}\n${imageUrl}`;
+                console.log("Sending message: " + msg); // Log the message
+                sendText(msg);
+            });
         });
     </script>
 </body>
