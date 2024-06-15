@@ -33,10 +33,6 @@
             <input id="radio-a" type="radio" name="family" value="はい" checked><label for="radio-a">はい</label>
             <input id="radio-b" type="radio" name="family" value="いいえ"><label for="radio-b">いいえ</label>
         </div>
-        <p class="mt-3">画像を撮影・選択</p>
-        <div>
-            <input type="file" class="form-control w-100 mt-1" name="image" accept="image/*" capture="camera" required>
-        </div>
         <input type="submit" class="mt-4 btn btn-primary" value="送信">
     </form>
 
@@ -79,45 +75,10 @@
             const temperature = $('input[name="temperature"]').val();
             const shushoujou = $('input[name="shushoujou"]').val();
             const family = $('input[name="family"]:checked').val();
-            const imageFile = $('input[name="image"]').prop('files')[0];
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = new Image();
-                img.src = e.target.result;
-
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const maxSize = 800; // 最大サイズ
-
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > maxSize) {
-                            height *= maxSize / width;
-                            width = maxSize;
-                        }
-                    } else {
-                        if (height > maxSize) {
-                            width *= maxSize / height;
-                            height = maxSize;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    const imageBase64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1]; // 圧縮してBase64エンコード
-
-                    const msg = `${name}\n${bangou}\n${temperature}\n${shushoujou}\n${family}\n${imageBase64}`;
-                    console.log("Sending message: " + msg); // Log the message
-                    sendText(msg);
-                };
-            };
-            reader.readAsDataURL(imageFile);
+            const msg = `${name}\n${bangou}\n${temperature}\n${shushoujou}\n${family}`;
+            console.log("Sending message: " + msg); // Log the message
+            sendText(msg);
         });
     </script>
 </body>
