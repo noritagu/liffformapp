@@ -52,9 +52,9 @@
             liff.init({
                 liffId: liffId
             }).then(() => {
-                initializeApp();
+                console.log("LIFF initialization succeeded");
             }).catch((err) => {
-                console.log('LIFF Initialization failed ', err);
+                console.error('LIFF Initialization failed ', err);
             });
         }
 
@@ -63,6 +63,7 @@
                 'type': 'text',
                 'text': text
             }]).then(function () {
+                console.log("Message sent: ", text);
                 liff.closeWindow();
             }).catch(function (error) {
                 console.error('Failed to send message', error);
@@ -112,6 +113,7 @@
                     const imageBase64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1]; // 圧縮してBase64エンコード
 
                     const msg = `${name}\n${bangou}\n${temperature}\n${shushoujou}\n${family}\n${imageBase64}`;
+                    console.log("Sending message: " + msg); // Log the message
                     sendText(msg);
                 };
             };
