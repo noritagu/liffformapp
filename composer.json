@@ -1,0 +1,7 @@
+{
+  "name": "php-lambda-app",
+  "description": "A simple PHP app for AWS Lambda",
+  "require": {
+    "php": "^7.4 || ^8.0"
+  }
+}
